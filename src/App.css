@@ -1,0 +1,90 @@
+:root {
+  --img1: url(imgs/figure/marco/idle.png);
+  --img2: url(imgs/figure/enel/player2-1.png);
+  --step2: 2115px;
+  --step5: 5281px;
+  --step6: 1500px;
+  --step9: 2250px;
+  --bg: url(imgs/maps/1.png);
+}
+body {
+  margin: 0;
+}
+.container-main {
+  display: flex;
+  justify-content: center;
+  align-items: self-end;
+  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  background-image: var(--bg);
+}
+.player {
+  position: absolute;
+  width: 250px;
+  height: 349px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.flip-player {
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  -ms-filter: "FlipH";
+  filter: FlipH;
+}
+#player1 {
+  background-image: var(--img1);
+  left: 0;
+}
+#player2 {
+  background-image: var(--img2);
+  right: 0;
+}
+.steps-2 {
+  animation: playerEffect1 1s steps(2) infinite;
+}
+.steps-5 {
+  animation: playerEffect5Steps 1s steps(5) infinite;
+}
+.steps-6 {
+  animation: playerEffect6Steps 1s steps(6) infinite;
+}
+.steps-9 {
+  animation: playerEffect9Steps 1s steps(9) infinite;
+}
+@keyframes playerEffect2Steps {
+  from {
+    background-position: 0px;
+  }
+  to {
+    background-position: calc(var(--step2) * -1);
+  }
+}
+@keyframes playerEffect5Steps {
+  from {
+    background-position: 0px;
+  }
+  to {
+    background-position: calc(var(--step5) * -1);
+  }
+}
+@keyframes playerEffect6Steps {
+  from {
+    background-position: 0px;
+  }
+  to {
+    background-position: calc(var(--step6) * -1);
+  }
+}
+@keyframes playerEffect9Steps {
+  from {
+    background-position: 0px;
+  }
+  to {
+    background-position: calc(var(--step9) * -1);
+  }
+}
