@@ -1,11 +1,14 @@
 :root {
   --img1: url(imgs/figure/marco/idle.png);
   --img2: url(imgs/figure/enel/player2-1.png);
-  --step2: 2115px;
+  --step2: 600px;
   --step5: 5281px;
   --step6: 1500px;
   --step9: 2250px;
   --bg: url(imgs/maps/1.png);
+  --width: 250px;
+  /* --width: 350px; */
+  --height: 349px;
 }
 body {
   margin: 0;
@@ -23,8 +26,8 @@ body {
 }
 .player {
   position: absolute;
-  width: 250px;
-  height: 349px;
+  width: var(--width);
+  height: var(--height);
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -45,7 +48,7 @@ body {
   right: 0;
 }
 .steps-2 {
-  animation: playerEffect1 1s steps(2) infinite;
+  animation: playerEffect2Steps 1s steps(2) infinite;
 }
 .steps-5 {
   animation: playerEffect5Steps 1s steps(5) infinite;
