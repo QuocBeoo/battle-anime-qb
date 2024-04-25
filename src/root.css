@@ -1,4 +1,5 @@
 :root {
+    --second: 0.7s;
     --step1: 340px;
     --step2: 680px;
     --step3: 1020px;

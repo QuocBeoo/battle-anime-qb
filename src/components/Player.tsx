@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { IListCharacter } from "../constants/listCharacter";
 import { STEP_ACTION } from "../constants/stepAction";
 import { IListValueAction } from "../constants/interface";
+import { ACTION_DETAIL } from "../constants/actionDetail";
 
 interface IPlayer {
     idUser: number,
@@ -16,10 +17,11 @@ console.log(colorArrayValuesMap, "colorArrayValuesMap")
 console.log(STEP_ACTION, "STEP_ACTION")
 function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
     const stepAction = STEP_ACTION[nameCharacter];
+    const actionDetail = ACTION_DETAIL[nameCharacter];
     console.log(stepAction, "stepAction")
     const [action, setAction] = useState<IListValueAction>(IListValueAction.idle);
     const [stepIdle, setStepIdle] = useState<number>(stepAction[action]);
-
+    let timeOut: ReturnType<typeof setTimeout>;
     const changeAction = (value: IListValueAction) => {
         setAction(() => value)
         setStepIdle(() => stepAction[value])
@@ -31,7 +33,20 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
         if (idUser === 2) {
             character = '--img2';
         }
+        const second = actionDetail[action]?.second || 1;
+
+        if (action !== IListValueAction.idle) {
+            timeOut = setTimeout(() => {
+                changeAction(IListValueAction.idle)
+            }, second * 1000);
+        }
+        else {
+            console.log("------------")
+            clearTimeout(timeOut);
+        }
+
         document.documentElement.style.setProperty(character, `url(${valueImg})`);
+        document.documentElement.style.setProperty("--second", `${second}s`);
     }
 
     const keydownFunc = useCallback((event: KeyboardEvent) => {
@@ -47,7 +62,7 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
     const keyupFunc = useCallback((event: KeyboardEvent) => {
         if (event.key === "Escape") {
             console.log("Up")
-            changeAction(IListValueAction.idle)
+            // changeAction(IListValueAction.idle)
         }
         else {
             console.log("Up")

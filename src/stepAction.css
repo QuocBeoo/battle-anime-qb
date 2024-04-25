@@ -1,5 +1,5 @@
 .steps-2 {
-    animation: playerEffect2Steps 1s steps(2) infinite;
+    animation: playerEffect2Steps var(--second) steps(2) infinite;
 }
 @keyframes playerEffect2Steps {
     from {
@@ -10,7 +10,7 @@
     }
 }
 .steps-3 {
-    animation: playerEffect3Steps 1s steps(3) infinite;
+    animation: playerEffect3Steps var(--second) steps(3) infinite;
 }
 @keyframes playerEffect3Steps {
     from {
@@ -21,7 +21,7 @@
     }
 }
 .steps-4 {
-    animation: playerEffect4Steps 1s steps(4) infinite;
+    animation: playerEffect4Steps var(--second) steps(4) infinite;
 }
 @keyframes playerEffect4Steps {
     from {
@@ -32,7 +32,7 @@
     }
 }
 .steps-5 {
-    animation: playerEffect5Steps 1s steps(5) infinite;
+    animation: playerEffect5Steps var(--second) steps(5) infinite;
 }
 
 @keyframes playerEffect5Steps {
@@ -44,7 +44,7 @@
     }
 }
 .steps-6 {
-    animation: playerEffect6Steps 1s steps(6) infinite;
+    animation: playerEffect6Steps var(--second) steps(6) infinite;
 }
 @keyframes playerEffect6Steps {
     from {
@@ -55,7 +55,7 @@
     }
 }
 .steps-7 {
-    animation: playerEffect7Steps 1s steps(7) infinite;
+    animation: playerEffect7Steps var(--second) steps(7) infinite;
 }
 @keyframes playerEffect7Steps {
     from {
@@ -66,7 +66,7 @@
     }
 }
 .steps-8 {
-    animation: playerEffect8Steps 1s steps(8) infinite;
+    animation: playerEffect8Steps var(--second) steps(8) infinite;
 }
 @keyframes playerEffect8Steps {
     from {
@@ -77,7 +77,7 @@
     }
 }
 .steps-9 {
-    animation: playerEffect9Steps 1s steps(9) infinite;
+    animation: playerEffect9Steps var(--second) steps(9) infinite;
 }
 @keyframes playerEffect9Steps {
     from {
