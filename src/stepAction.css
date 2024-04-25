@@ -1,0 +1,89 @@
+.steps-2 {
+    animation: playerEffect2Steps 1s steps(2) infinite;
+}
+@keyframes playerEffect2Steps {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: calc(var(--step2) * -1);
+    }
+}
+.steps-3 {
+    animation: playerEffect3Steps 1s steps(3) infinite;
+}
+@keyframes playerEffect3Steps {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: calc(var(--step3) * -1);
+    }
+}
+.steps-4 {
+    animation: playerEffect4Steps 1s steps(4) infinite;
+}
+@keyframes playerEffect4Steps {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: calc(var(--step4) * -1);
+    }
+}
+.steps-5 {
+    animation: playerEffect5Steps 1s steps(5) infinite;
+}
+
+@keyframes playerEffect5Steps {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: calc(var(--step5) * -1);
+    }
+}
+.steps-6 {
+    animation: playerEffect6Steps 1s steps(6) infinite;
+}
+@keyframes playerEffect6Steps {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: calc(var(--step6) * -1);
+    }
+}
+.steps-7 {
+    animation: playerEffect7Steps 1s steps(7) infinite;
+}
+@keyframes playerEffect7Steps {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: calc(var(--step7) * -1);
+    }
+}
+.steps-8 {
+    animation: playerEffect8Steps 1s steps(8) infinite;
+}
+@keyframes playerEffect8Steps {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: calc(var(--step8) * -1);
+    }
+}
+.steps-9 {
+    animation: playerEffect9Steps 1s steps(9) infinite;
+}
+@keyframes playerEffect9Steps {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: calc(var(--step9) * -1);
+    }
+}

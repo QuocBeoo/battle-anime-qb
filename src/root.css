@@ -1,0 +1,16 @@
+:root {
+    --step1: 340px;
+    --step2: 680px;
+    --step3: 1020px;
+    --step4: 1360px;
+    --step5: 1700px;
+    --step6: 2040px;
+    --step7: 2380px;
+    --step8: 2720px;
+    --step9: 3060px;
+    --img1: url(imgs/figure/marco/idle.png);
+    --img2: url(imgs/figure/marco/idle.png);
+    --bg: url(imgs/maps/1.png);
+    --width: 340px;
+    --height: 298px;
+}

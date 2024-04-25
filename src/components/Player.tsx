@@ -1,63 +1,75 @@
 import { useCallback, useEffect, useState } from "react";
+import { IListCharacter } from "../constants/listCharacter";
+import { STEP_ACTION } from "../constants/stepAction";
+import { IListValueAction } from "../constants/interface";
 
 interface IPlayer {
     idUser: number,
+    nameCharacter: IListCharacter,
+    flipPlayer?: boolean,
 }
 
-const INDEX_RESET = 1;
+const colorArrayValuesMap = Object.values(IListCharacter)
+    .map(value => ({ label: value, value }));
 
-function Player({ idUser }: IPlayer) {
-    // const [index, setIndex] = useState(INDEX_RESET);
-    // console.log(index, "index")
+console.log(colorArrayValuesMap, "colorArrayValuesMap")
+console.log(STEP_ACTION, "STEP_ACTION")
+function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
+    const stepAction = STEP_ACTION[nameCharacter];
+    console.log(stepAction, "stepAction")
+    const [action, setAction] = useState<IListValueAction>(IListValueAction.idle);
+    const [stepIdle, setStepIdle] = useState<number>(stepAction[action]);
 
-    // const changeIndex = (value: number) => {
-    //     setIndex(() => value)
-    // }
+    const changeAction = (value: IListValueAction) => {
+        setAction(() => value)
+        setStepIdle(() => stepAction[value])
+    }
 
-    // const changeAction = () => {
-    //     const valueImg1 = `imgs/figure/marco/player1-${index}.png`
-    //     document.documentElement.style.setProperty('--img1', `url(${valueImg1})`);
-    // }
+    const changeActionImg = () => {
+        const valueImg = `imgs/figure/${nameCharacter}/${action}.png`;
+        let character = '--img1';
+        if (idUser === 2) {
+            character = '--img2';
+        }
+        document.documentElement.style.setProperty(character, `url(${valueImg})`);
+    }
 
-    // const keydownFunc = useCallback((event: KeyboardEvent) => {
-    //     if (event.key === "Escape") {
-    //         console.log("Down")
-    //         changeIndex(2)
-    //     }
-    //     else {
-    //         console.log("Down")
-    //         changeIndex(3)
-    //     }
-    // }, []);
+    const keydownFunc = useCallback((event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+            console.log("Down")
+            changeAction(IListValueAction.atk1)
+        }
+        else {
+            console.log("Down")
+        }
+    }, []);
 
-    // const keydownUp = useCallback((event: KeyboardEvent) => {
-    //     if (event.key === "Escape") {
-    //         console.log("Up")
-    //         changeIndex(INDEX_RESET)
-    //     }
-    //     else {
-    //         console.log("Up")
-    //         changeIndex(INDEX_RESET)
-    //     }
-    // }, []);
+    const keyupFunc = useCallback((event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+            console.log("Up")
+            changeAction(IListValueAction.idle)
+        }
+        else {
+            console.log("Up")
+        }
+    }, []);
 
-    // useEffect(() => {
-    //     changeAction()
-    // }, [index]);
+    useEffect(() => {
+        changeActionImg()
+    }, [action]);
 
-    // useEffect(() => {
-    //     document.addEventListener("keydown", keydownFunc, false);
-    //     document.addEventListener("keyup", keydownUp, false);
+    useEffect(() => {
+        document.addEventListener("keydown", keydownFunc, false);
+        document.addEventListener("keyup", keyupFunc, false);
 
-    //     return () => {
-    //         document.removeEventListener("keydown", keydownFunc, false);
-    //         document.removeEventListener("keyup", keydownUp, false);
-    //     };
-    // }, [keydownFunc, keydownUp]);
-
+        return () => {
+            document.removeEventListener("keydown", keydownFunc, false);
+            document.removeEventListener("keyup", keyupFunc, false);
+        };
+    }, [keydownFunc, keyupFunc]);
 
     return (
-        <div id={`player${idUser}`} className="player steps-6"></div>
+        <div id={`player${idUser}`} className={`player steps-${stepIdle} ${flipPlayer ? "flip-player" : ""}`}></div>
     )
 }
 

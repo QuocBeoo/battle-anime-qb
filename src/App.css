@@ -1,15 +1,3 @@
-:root {
-  --img1: url(imgs/figure/marco/idle.png);
-  --img2: url(imgs/figure/enel/player2-1.png);
-  --step2: 600px;
-  --step5: 5281px;
-  --step6: 1500px;
-  --step9: 2250px;
-  --bg: url(imgs/maps/1.png);
-  --width: 250px;
-  /* --width: 350px; */
-  --height: 349px;
-}
 body {
   margin: 0;
 }
@@ -29,7 +17,7 @@ body {
   width: var(--width);
   height: var(--height);
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: auto;
 }
 .flip-player {
   -moz-transform: scaleX(-1);
@@ -46,48 +34,4 @@ body {
 #player2 {
   background-image: var(--img2);
   right: 0;
-}
-.steps-2 {
-  animation: playerEffect2Steps 1s steps(2) infinite;
-}
-.steps-5 {
-  animation: playerEffect5Steps 1s steps(5) infinite;
-}
-.steps-6 {
-  animation: playerEffect6Steps 1s steps(6) infinite;
-}
-.steps-9 {
-  animation: playerEffect9Steps 1s steps(9) infinite;
-}
-@keyframes playerEffect2Steps {
-  from {
-    background-position: 0px;
-  }
-  to {
-    background-position: calc(var(--step2) * -1);
-  }
-}
-@keyframes playerEffect5Steps {
-  from {
-    background-position: 0px;
-  }
-  to {
-    background-position: calc(var(--step5) * -1);
-  }
-}
-@keyframes playerEffect6Steps {
-  from {
-    background-position: 0px;
-  }
-  to {
-    background-position: calc(var(--step6) * -1);
-  }
-}
-@keyframes playerEffect9Steps {
-  from {
-    background-position: 0px;
-  }
-  to {
-    background-position: calc(var(--step9) * -1);
-  }
 }
