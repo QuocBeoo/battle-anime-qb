@@ -10,7 +10,7 @@ function App() {
     <>
       <div className="container-main">
         <Player idUser={1} nameCharacter={IListCharacter["marco"]} />
-        <Player idUser={2} flipPlayer nameCharacter={IListCharacter["marco"]} />
+        {/* <Player idUser={2} flipPlayer nameCharacter={IListCharacter["marco"]} /> */}
       </div>
     </>
   )

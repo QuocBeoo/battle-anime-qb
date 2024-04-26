@@ -20,7 +20,7 @@ export const ACTION_CORE = {
     range: 200,
   },
   atk2: {
-    second: 0.9,
+    second: 1,
     dmg: 100,
     range: 200,
   },

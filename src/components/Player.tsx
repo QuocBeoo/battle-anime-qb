@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { IListCharacter } from "../constants/listCharacter";
 import { STEP_ACTION } from "../constants/stepAction";
 import { IListValueAction } from "../constants/interface";
@@ -11,6 +11,8 @@ interface IPlayer {
 }
 
 const actionClassic = IListValueAction.run;
+// Maximum wait time for next lock
+const delta = 500;
 
 function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
     // Number of photos per frame
@@ -25,14 +27,16 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
     // Current number of photos per frame
     const [stepIdle, setStepIdle] = useState<number>(stepAction[action]);
 
+    // Save prev key code
+    const prevKey = useRef<string | null>(null);
+
     // Reset action => clearTimeout
     let timeOut: ReturnType<typeof setTimeout>;
 
-    // Maximum wait time for next lock
-    const [delta, setDelta] = useState<number>(500);
-
     // Time of last key press
-    const [lastKeypressTime, setLastKeypressTime] = useState<number>(0);
+    // const lastKeypressTime = useRef<number>(Date.now());
+
+    // console.log(lastKeypressTime, "lastKeypressTime")
 
     const changeAction = (value: IListValueAction) => {
         setAction(() => value)
@@ -55,11 +59,12 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
         if (action !== actionClassic) {
             timeOut = setTimeout(() => {
                 changeAction(actionClassic)
+                prevKey.current = null;
             }, second * 1000);
-            console.log(second, "second------------")
+            // console.log(second, "second------------")
         }
         else {
-            console.log("------------")
+            // console.log("------------")
             clearTimeout(timeOut);
         }
 
@@ -69,42 +74,40 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
         document.documentElement.style.setProperty("--second", `${second}s`);
     }
 
-    const keydownFunc = useCallback((event: KeyboardEvent) => {
-        console.log(event, "event.key")
-        // atk
-        if (event.key.toLowerCase() === "q") {
-            console.log("Down")
 
-            let keypressTime: any = new Date();
-            if (keypressTime - lastKeypressTime <= delta) {
-
-                console.log("Double---------")
-                keypressTime = 0;
-            }
-            setLastKeypressTime(keypressTime);
-
-            changeAction(IListValueAction.atk1)
-        }
-        else {
-            console.log("Down")
-        }
-    }, []);
-
-    const keyupFunc = useCallback((event: KeyboardEvent) => {
-        if (event.key === "Escape") {
-            console.log("Up")
-            // changeAction(actionClassic)
-        }
-        else {
-            console.log("Up")
-        }
-    }, []);
 
     useEffect(() => {
         changeActionImg()
     }, [action]);
 
     useEffect(() => {
+        const keydownFunc = (event: KeyboardEvent) => {
+            console.log(event, "event")
+            console.log(prevKey, "prevKey")
+            // atk
+            if (event.key === "ArrowDown" && prevKey.current === "q" || prevKey.current === "ArrowDown" && event.key.toLowerCase() === "q") {
+                changeAction(IListValueAction.atk2)
+            }
+            else if (event.key.toLowerCase() === "q") {
+                changeAction(IListValueAction.atk1)
+            }
+            else {
+                // console.log("Down")
+            }
+            prevKey.current = event.key;
+        }
+
+        const keyupFunc = (event: KeyboardEvent) => {
+            // console.log(event, "event.key")
+            // atk
+            if (event.key.toLowerCase() === "q") {
+                // console.log("Up")
+            }
+            else {
+                // console.log("Up")
+            }
+        }
+
         document.addEventListener("keydown", keydownFunc, false);
         document.addEventListener("keyup", keyupFunc, false);
 
@@ -112,7 +115,7 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
             document.removeEventListener("keydown", keydownFunc, false);
             document.removeEventListener("keyup", keyupFunc, false);
         };
-    }, [keydownFunc, keyupFunc]);
+    }, []);
 
     return (
         <div id={`player${idUser}`} className={`player steps-${stepIdle} ${flipPlayer ? "flip-player" : ""}`}></div>
