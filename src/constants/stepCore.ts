@@ -3,7 +3,7 @@ export const STEP_CORE = {
   run: 9,
   jump: 5,
   atk1: 6,
-  atk2: 2,
+  atk2: 10,
   atk3: 5,
   shield: 2,
   hurt: 2,

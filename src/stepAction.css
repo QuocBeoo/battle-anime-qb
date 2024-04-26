@@ -87,3 +87,14 @@
         background-position: calc(var(--step9) * -1);
     }
 }
+.steps-10 {
+    animation: playerEffect10Steps var(--second) steps(10) infinite;
+}
+@keyframes playerEffect10Steps {
+    from {
+        background-position: 0px;
+    }
+    to {
+        background-position: calc(var(--step10) * -1);
+    }
+}

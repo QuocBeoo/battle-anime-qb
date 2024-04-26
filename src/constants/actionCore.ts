@@ -15,12 +15,12 @@ export const ACTION_CORE = {
     second: 1,
   },
   atk1: {
-    second: 0.7,
+    second: 0.5,
     dmg: 100,
     range: 200,
   },
   atk2: {
-    second: 0.7,
+    second: 0.9,
     dmg: 100,
     range: 200,
   },

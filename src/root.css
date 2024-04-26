@@ -1,17 +1,18 @@
 :root {
     --second: 0.7s;
-    --step1: 340px;
-    --step2: 680px;
-    --step3: 1020px;
-    --step4: 1360px;
-    --step5: 1700px;
-    --step6: 2040px;
-    --step7: 2380px;
-    --step8: 2720px;
-    --step9: 3060px;
+    --step1: 375px;
+    --step2: 750px;
+    --step3: 1125px;
+    --step4: 1500px;
+    --step5: 1875px;
+    --step6: 2250px;
+    --step7: 2625px;
+    --step8: 3000px;
+    --step9: 3375px;
+    --step10: 3750px;
     --img1: url(imgs/figure/marco/idle.png);
     --img2: url(imgs/figure/marco/idle.png);
     --bg: url(imgs/maps/1.png);
-    --width: 340px;
-    --height: 298px;
+    --width: 375px;
+    --height: 375px;
 }
