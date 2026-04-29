@@ -178,6 +178,12 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
             if (event.key === "ArrowDown" && prevKey.current === "q" || prevKey.current === "ArrowDown" && event.key.toLowerCase() === "q") {
                 changeActionRef.current(IListValueAction.atk2)
             }
+            else if (event.key.toLowerCase() === "p") {
+                if (!event.repeat) changeActionRef.current(IListValueAction.atk2)
+            }
+            else if (event.key.toLowerCase() === "o") {
+                if (!event.repeat) changeActionRef.current(IListValueAction.atk1)
+            }
             else if (event.key.toLowerCase() === "q") {
                 changeActionRef.current(IListValueAction.atk1)
             }
