@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IListCharacter } from "../constants/listCharacter";
+import { CHARACTER_SPRITE_INSET } from "../constants/characterVisualBounds";
 import { STEP_ACTION } from "../constants/stepAction";
 import { IListValueAction } from "../constants/interface";
 import { ACTION_DETAIL } from "../constants/actionDetail";
@@ -10,9 +11,7 @@ interface IPlayer {
     flipPlayer?: boolean,
 }
 
-const actionClassic = IListValueAction.run;
-// Maximum wait time for next lock
-const delta = 500;
+const actionClassic = IListValueAction.idle;
 
 function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
     // Number of photos per frame
@@ -27,8 +26,24 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
     // Current number of photos per frame
     const [stepIdle, setStepIdle] = useState<number>(stepAction[action]);
 
+    // Horizontal offset (px); player has left:0, translateX moves along container width
+    const [offsetX, setOffsetX] = useState(0);
+
+    // Sprite faces left on screen when true (combined with flipPlayer for P2-style spawn)
+    const [facingLeft, setFacingLeft] = useState(false);
+
+    const playerRef = useRef<HTMLDivElement>(null);
+    const spriteInsetRef = useRef(CHARACTER_SPRITE_INSET[nameCharacter]);
+    spriteInsetRef.current = CHARACTER_SPRITE_INSET[nameCharacter];
+
     // Save prev key code
     const prevKey = useRef<string | null>(null);
+
+    const rightHeld = useRef(false);
+    const leftHeld = useRef(false);
+    const runRaf = useRef<number | null>(null);
+    const holdStartMs = useRef(0);
+    const lastFrameMs = useRef(0);
 
     // Reset action => clearTimeout
     let timeOut: ReturnType<typeof setTimeout>;
@@ -43,6 +58,9 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
         setStepIdle(() => stepAction[value])
     }
 
+    const changeActionRef = useRef(changeAction);
+    changeActionRef.current = changeAction;
+
     const changeActionImg = () => {
 
         // Check user action
@@ -55,8 +73,8 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
         // ClearTimeout time
         const second = actionDetail[action]?.second || 1;
 
-        // Once done will reset the action
-        if (action !== actionClassic) {
+        // Once done will reset the action (run is cleared on keyup, not by timer)
+        if (action !== actionClassic && action !== IListValueAction.run) {
             timeOut = setTimeout(() => {
                 changeAction(actionClassic)
                 prevKey.current = null;
@@ -81,30 +99,128 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
     }, [action]);
 
     useEffect(() => {
+        const clampOffsetX = (next: number) => {
+            const el = playerRef.current;
+            const parent = el?.offsetParent as HTMLElement | undefined;
+            const pw = el?.offsetWidth ?? 375;
+            const cw = parent?.clientWidth ?? window.innerWidth;
+            const { left: insL, right: insR } = spriteInsetRef.current;
+            const minX = -insL;
+            const maxX = Math.max(minX, cw - pw + insR);
+            return Math.max(minX, Math.min(maxX, next));
+        };
+
+        const stopRunMove = () => {
+            rightHeld.current = false;
+            leftHeld.current = false;
+            lastFrameMs.current = 0;
+            if (runRaf.current != null) {
+                cancelAnimationFrame(runRaf.current);
+                runRaf.current = null;
+            }
+        };
+
+        const tick = (t: number) => {
+            const dir = leftHeld.current ? -1 : rightHeld.current ? 1 : 0;
+            if (dir === 0) {
+                runRaf.current = null;
+                return;
+            }
+            if (lastFrameMs.current === 0) {
+                lastFrameMs.current = t;
+                runRaf.current = requestAnimationFrame(tick);
+                return;
+            }
+            const dt = Math.min(40, t - lastFrameMs.current);
+            lastFrameMs.current = t;
+            const held = t - holdStartMs.current;
+            const pxPerSec = Math.min(420, 150 + held * 0.35);
+            const dx = (pxPerSec * dt) / 1000;
+            setOffsetX((x) => clampOffsetX(x + dir * dx));
+            runRaf.current = requestAnimationFrame(tick);
+        };
+
+        const startRun = (dir: 1 | -1) => {
+            if (dir === 1) {
+                rightHeld.current = true;
+                leftHeld.current = false;
+                setFacingLeft(false);
+            } else {
+                leftHeld.current = true;
+                rightHeld.current = false;
+                setFacingLeft(true);
+            }
+            holdStartMs.current = performance.now();
+            lastFrameMs.current = 0;
+            setOffsetX((x) => clampOffsetX(x + dir * 5));
+            changeActionRef.current(IListValueAction.run);
+            if (runRaf.current == null) {
+                runRaf.current = requestAnimationFrame(tick);
+            }
+        };
+
         const keydownFunc = (event: KeyboardEvent) => {
-            console.log(event, "event")
-            console.log(prevKey, "prevKey")
-            // atk
+            if (event.key === "ArrowRight") {
+                event.preventDefault();
+                if (event.repeat) return;
+                startRun(1);
+                prevKey.current = event.key;
+                return;
+            }
+            if (event.key === "ArrowLeft") {
+                event.preventDefault();
+                if (event.repeat) return;
+                startRun(-1);
+                prevKey.current = event.key;
+                return;
+            }
+
             if (event.key === "ArrowDown" && prevKey.current === "q" || prevKey.current === "ArrowDown" && event.key.toLowerCase() === "q") {
-                changeAction(IListValueAction.atk2)
+                changeActionRef.current(IListValueAction.atk2)
             }
             else if (event.key.toLowerCase() === "q") {
-                changeAction(IListValueAction.atk1)
-            }
-            else {
-                // console.log("Down")
+                changeActionRef.current(IListValueAction.atk1)
             }
             prevKey.current = event.key;
         }
 
         const keyupFunc = (event: KeyboardEvent) => {
-            // console.log(event, "event.key")
-            // atk
-            if (event.key.toLowerCase() === "q") {
-                // console.log("Up")
+            if (event.key === "ArrowRight") {
+                event.preventDefault();
+                rightHeld.current = false;
+                if (!leftHeld.current) {
+                    if (runRaf.current != null) {
+                        cancelAnimationFrame(runRaf.current);
+                        runRaf.current = null;
+                    }
+                    lastFrameMs.current = 0;
+                    changeActionRef.current(IListValueAction.idle);
+                } else {
+                    setFacingLeft(true);
+                    lastFrameMs.current = 0;
+                    holdStartMs.current = performance.now();
+                }
+                return;
             }
-            else {
-                // console.log("Up")
+            if (event.key === "ArrowLeft") {
+                event.preventDefault();
+                leftHeld.current = false;
+                if (!rightHeld.current) {
+                    if (runRaf.current != null) {
+                        cancelAnimationFrame(runRaf.current);
+                        runRaf.current = null;
+                    }
+                    lastFrameMs.current = 0;
+                    changeActionRef.current(IListValueAction.idle);
+                } else {
+                    setFacingLeft(false);
+                    lastFrameMs.current = 0;
+                    holdStartMs.current = performance.now();
+                }
+                return;
+            }
+            if (event.key.toLowerCase() === "q") {
+                // reserved
             }
         }
 
@@ -112,13 +228,24 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
         document.addEventListener("keyup", keyupFunc, false);
 
         return () => {
+            stopRunMove();
             document.removeEventListener("keydown", keydownFunc, false);
             document.removeEventListener("keyup", keyupFunc, false);
         };
     }, []);
 
+    const spriteFlipped = flipPlayer !== facingLeft;
+    const playerTransform = spriteFlipped
+        ? `translateX(${offsetX}px) scaleX(-1)`
+        : `translateX(${offsetX}px)`;
+
     return (
-        <div id={`player${idUser}`} className={`player steps-${stepIdle} ${flipPlayer ? "flip-player" : ""}`}></div>
+        <div
+            ref={playerRef}
+            id={`player${idUser}`}
+            className={`player steps-${stepIdle}`}
+            style={{ transform: playerTransform }}
+        />
     )
 }
 
