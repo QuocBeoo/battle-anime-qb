@@ -22,6 +22,17 @@ yarn build
 yarn preview
 ```
 
+## Deploy (Vercel)
+
+This repo includes [`vercel.json`](vercel.json) so Vercel uses **Yarn**, runs **`yarn build`** (`tsc && vite build`), and publishes the **`dist`** output.
+
+1. Push the repo to GitHub (or GitLab / Bitbucket).
+2. In [Vercel](https://vercel.com): **Add New… → Project** → import the repository.
+3. Leave defaults (Vite is detected; settings match `vercel.json`) → **Deploy**.
+4. Every push to the connected production branch redeploys automatically.
+
+CLI alternative: install the [Vercel CLI](https://vercel.com/docs/cli), run `vercel` in the project root, and link the project once.
+
 ## Controls (keyboard)
 
 | Key | Behavior |
