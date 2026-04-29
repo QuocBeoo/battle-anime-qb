@@ -64,7 +64,7 @@ function Player({ idUser, nameCharacter, flipPlayer = false }: IPlayer) {
     const changeActionImg = () => {
 
         // Check user action
-        const valueImg = `imgs/figure/${nameCharacter}/${action}.png`;
+        const valueImg = `/imgs/figure/${nameCharacter}/${action}.png`;
         let character = '--img1';
         if (idUser === 2) {
             character = '--img2';
